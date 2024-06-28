@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "bim-portal-deutschland-visu"
+version = "0.1.0"
+description = ""
+authors = ["Valentin Schweigl <valentin.marquart@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+requests = "^2.32.3"
+openapi-python-client = "^0.21.1"
+httpx = ">=0.20.0,<0.28.0"
+attrs = ">=21.3.0"
+python-dateutil = "^2.8.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["F", "I", "UP"]
