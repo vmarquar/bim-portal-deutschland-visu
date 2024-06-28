@@ -13,8 +13,59 @@ The endpoint client (including documentation, typing, url requests etc.) was cre
 `openapi-python-client generate --url https://bimdeutschland.github.io/BIM-Portal-REST-API-Dokumentation/swagger.yaml`
 
 
+## Example
+```python
+from bim_portal_deutschland_visu.models import *
 
-## Usage
+from bim_portal_deutschland_visu.api.organisationen import get_infrastruktur_api_v1_public_organisation
+from bim_portal_deutschland_visu.api.merkmalsgruppen import get_merkmale_api_v1_public_propertygroup_guid, post_merkmale_api_v1_public_propertygroup
+from bim_portal_deutschland_visu.api.filter_ import get_merkmale_api_v1_public_filter
+from bim_portal_deutschland_visu.api.merkmale import get_merkmale_api_v1_public_property_guid, post_merkmale_api_v1_public_property
+from bim_portal_deutschland_visu.types import Response
+from bim_portal_deutschland_visu.client import Client, AuthenticatedClient
+
+
+if __name__ == "__main__":
+    
+    client = Client(base_url="https://via.bund.de/bim") # infrastruktur/api/v1/public/organisation
+
+    with client as client:
+        
+        # 1) Access first api endpoint and get an list of Organisation classes back:
+        # Hint: The Organisation must provice their pset list via the rest api. This has set up explicitly by the org (?)
+        organisations: Organisation = get_infrastruktur_api_v1_public_organisation.sync(client=client)        
+
+
+        # 2) Access the second API Endpoint and get a list of all Filter classes back:
+        # "Merkmalsfiltergruppen" are filter possibilites on property sets (PSETs)
+        # Currently, as of 28.06.2024, a property-set can be filtered by follwowing Filters: "Harmoniesierte AwF", "Leistungsphasen", "LOI" or one of their subclasses e.g. "Lph 1", "'010 Bestandserfassung und -modellierung'", "LOI 400"
+        pset_filter_groups: Filter = get_merkmale_api_v1_public_filter.sync(client=client)
+        print(pset_filter_groups)
+
+
+        # 3a) Access all publicly available and visible PSETs, that match the filter criteria
+        # Liste aller öffentlich sichtbaren Merkmalsgruppen, welche die übermittelten Suchkriterien erfüllen
+        # A pagination is active by default and gives a maximum of 1000 items per requests
+        # it returns a list of Merkmalsgruppen Classes, by default paginated to a maximum of 1000 if not further filter criteria are applied
+        matching_psets: Merkmalsgruppe = post_merkmale_api_v1_public_propertygroup.sync(client=client, body=Suchkriterium(page_number=0))
+        print(matching_psets[-1])
+
+
+        # 4a) Properties Post
+        # A pagination is active by default and gives a maximum of 1000 items per requests
+        # it returns a list of Merkmal Classes, by default paginated to a maximum of 1000 if not further filter criteria is applied
+        props_page0 : Merkmal = post_merkmale_api_v1_public_property.sync(body=Suchkriterium(page_number=0), client=client)
+
+        
+        
+        pass
+
+
+
+```
+
+
+## General Usage
 First, create a client:
 
 ```python
@@ -56,6 +107,9 @@ async with client as client:
     response: Response[MyDataModel] = await get_my_data_model.asyncio_detailed(client=client)
 ```
 
+
+
+## Details - SSL Certificate Verfication and custom keychains
 By default, when you're calling an HTTPS API it will attempt to verify that SSL is working correctly. Using certificate verification is highly recommended most of the time, but sometimes you may need to authenticate to a server (especially an internal server) using a custom certificate bundle.
 
 ```python
