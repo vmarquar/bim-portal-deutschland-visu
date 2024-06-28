@@ -27,12 +27,12 @@ from bim_portal_deutschland_visu.client import Client, AuthenticatedClient
 
 if __name__ == "__main__":
     
-    client = Client(base_url="https://via.bund.de/bim") # infrastruktur/api/v1/public/organisation
+    client = Client(base_url="https://via.bund.de/bim") 
 
     with client as client:
         
         # 1) Access first api endpoint and get an list of Organisation classes back:
-        # Hint: The Organisation must provice their pset list via the rest api. This has set up explicitly by the org (?)
+        # Hint: The Organisation must provide their pset list via the rest api. This has set up explicitly by the org (?)
         organisations: Organisation = get_infrastruktur_api_v1_public_organisation.sync(client=client)        
 
 
