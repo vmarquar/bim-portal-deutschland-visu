@@ -1,4 +1,4 @@
-# bim_portal_deutschland_visu (WIP)
+# BIM Portal Deutschland - Python Client & Visualization (WIP)
 
 This is an open source module to consume the REST API of the BIM Portal Deutschland. In the future, it will show the relationship between the properties and their associated propery-sets / name-sets (PSETs) as a graph tree.
 
